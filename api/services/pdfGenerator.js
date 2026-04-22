@@ -1,14 +1,30 @@
-const puppeteer = require('puppeteer');
 const { buildResumeHtml } = require('../templates/resume');
 
 let browserInstance = null;
 
 async function getBrowser() {
   if (!browserInstance || !browserInstance.connected) {
-    browserInstance = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-    });
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      const puppeteer = require('puppeteer-core');
+      const chromium = require('@sparticuz/chromium');
+      
+      // Optional: Increase timeout and adjust args for Vercel limits
+      chromium.setGraphicsMode = false;
+      
+      browserInstance = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
+      });
+    } else {
+      const puppeteer = require('puppeteer');
+      browserInstance = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+    }
   }
   return browserInstance;
 }

@@ -20,6 +20,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong. Please try again.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`ResumeForge API running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`ResumeForge API running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
