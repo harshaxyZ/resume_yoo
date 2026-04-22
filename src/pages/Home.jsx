@@ -1,75 +1,107 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { FileText, Wand2, Search, ArrowRight } from 'lucide-react'
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+}
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+}
 
 export default function Home() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <div className="max-w-5xl mx-auto px-6">
       {/* Hero */}
-      <section className="py-20 sm:py-32 text-center">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary tracking-tight leading-tight">
+      <section className="py-24 sm:py-32 flex flex-col items-center text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-8 border border-blue-100"
+        >
+          <span className="flex h-2 w-2 rounded-full bg-blue-600"></span>
+          ResumeForge 2.0 is live
+        </motion.div>
+
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 tracking-tight leading-[1.1]"
+        >
           Build. Analyse.
           <br />
-          <span className="text-accent">Get Hired.</span>
-        </h1>
-        <p className="mt-5 text-base sm:text-lg text-text-secondary max-w-xl mx-auto leading-relaxed">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            Get Hired.
+          </span>
+        </motion.h1>
+
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl leading-relaxed"
+        >
           Your AI-powered resume companion. Get ATS scores, fix weaknesses,
           tailor to job descriptions, and build professional resumes in minutes.
-        </p>
+        </motion.p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+        >
           <Link
             to="/analyse"
-            className="w-full sm:w-auto px-6 py-3 bg-accent text-white text-sm font-semibold rounded-lg
-              hover:bg-accent-hover transition-colors duration-150 no-underline text-center"
+            className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white text-base font-semibold rounded-xl
+              hover:bg-blue-700 active:scale-[0.98] transition-all duration-200 shadow-sm flex items-center justify-center gap-2"
           >
             Analyse My Resume
+            <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             to="/build"
-            className="w-full sm:w-auto px-6 py-3 bg-white text-text-primary text-sm font-semibold rounded-lg
-              border border-border hover:border-border-hover hover:bg-surface transition-colors duration-150 no-underline text-center"
+            className="w-full sm:w-auto px-8 py-3.5 bg-white text-gray-900 text-base font-semibold rounded-xl
+              border border-gray-200 hover:border-gray-300 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 shadow-sm flex items-center justify-center gap-2"
           >
             Build a Resume
           </Link>
-        </div>
+        </motion.div>
       </section>
 
       {/* Features */}
-      <section className="pb-20 sm:pb-32">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <section className="pb-24 sm:pb-32">
+        <motion.div 
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
           <FeatureCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-            }
+            icon={<FileText className="w-6 h-6 text-blue-600" />}
             title="ATS Score Check"
-            description="Get a detailed breakdown of how well your resume performs against applicant tracking systems."
+            description="Get a detailed breakdown of how well your resume performs against modern applicant tracking systems."
           />
           <FeatureCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-            }
+            icon={<Wand2 className="w-6 h-6 text-blue-600" />}
             title="Smart Resume Builder"
             description="Build from scratch, upload a LinkedIn export, or paste any document. AI fills in the rest."
           />
           <FeatureCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            }
+            icon={<Search className="w-6 h-6 text-gray-400" />}
             title="Job Matching"
-            description="Find jobs that match your resume and skills. Powered by AI analysis."
+            description="Find jobs that match your resume and skills seamlessly. Powered by AI analysis."
             comingSoon
           />
-        </div>
+        </motion.div>
       </section>
     </div>
   )
@@ -77,17 +109,28 @@ export default function Home() {
 
 function FeatureCard({ icon, title, description, comingSoon = false }) {
   return (
-    <div className="relative border border-border rounded-xl p-6 hover:border-border-hover transition-colors duration-150">
+    <motion.div 
+      variants={item}
+      className={`relative border rounded-2xl p-8 transition-all duration-200 ${
+        comingSoon 
+          ? 'border-gray-200 bg-gray-50/50' 
+          : 'border-gray-200 bg-white hover:border-blue-200 hover:shadow-lg hover:shadow-blue-900/5'
+      }`}
+    >
       {comingSoon && (
-        <span className="absolute top-4 right-4 px-2 py-0.5 bg-surface text-text-tertiary text-[10px] font-semibold uppercase tracking-wider rounded-full border border-border">
+        <span className="absolute top-6 right-6 px-2.5 py-1 bg-white text-gray-500 text-[11px] font-bold uppercase tracking-wider rounded-full border border-gray-200 shadow-sm">
           Coming Soon
         </span>
       )}
-      <div className="w-9 h-9 rounded-lg bg-accent-light text-accent flex items-center justify-center mb-4">
+      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${comingSoon ? 'bg-gray-100' : 'bg-blue-50'}`}>
         {icon}
       </div>
-      <h3 className="text-sm font-semibold text-text-primary mb-1.5">{title}</h3>
-      <p className="text-sm text-text-secondary leading-relaxed">{description}</p>
-    </div>
+      <h3 className={`text-lg font-bold mb-2 tracking-tight ${comingSoon ? 'text-gray-500' : 'text-gray-900'}`}>
+        {title}
+      </h3>
+      <p className={`text-sm leading-relaxed ${comingSoon ? 'text-gray-400' : 'text-gray-600'}`}>
+        {description}
+      </p>
+    </motion.div>
   )
 }

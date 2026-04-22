@@ -2,16 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @theme {
-  --color-accent: #1a56db;
-  --color-accent-hover: #1648c0;
-  --color-accent-light: #e8eefb;
-  --color-text-primary: #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-tertiary: #9ca3af;
-  --color-border: #e5e7eb;
-  --color-border-hover: #d1d5db;
-  --color-surface: #f9fafb;
-  --color-surface-hover: #f3f4f6;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -28,25 +18,14 @@ html {
 }
 
 body {
-  color: var(--color-text-primary);
+  color: #111827;
   background-color: #ffffff;
   line-height: 1.6;
 }
 
 ::selection {
-  background-color: var(--color-accent);
+  background-color: #2563eb;
   color: #ffffff;
-}
-
-/* Smooth page transitions */
-.page-enter {
-  opacity: 0;
-  transform: translateY(8px);
-}
-.page-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 /* Skeleton loader animation */
@@ -56,7 +35,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 800px 100%;
   animation: shimmer 1.5s infinite linear;
   border-radius: 6px;
@@ -82,13 +61,6 @@ body {
   background: #9ca3af;
 }
 
-/* Focus styles */
-input:focus, textarea:focus {
-  outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
-}
-
 /* Button base reset */
 button {
   cursor: pointer;
@@ -101,3 +73,4 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
+

@@ -54,7 +54,7 @@ export default function ScoreMeter({ score = 0, size = 140, strokeWidth = 10 }) 
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-3xl font-bold" style={{ color }}>{score}</span>
-          <span className="text-xs text-text-tertiary">/100</span>
+          <span className="text-xs text-gray-400">/100</span>
         </div>
       </div>
       <span className="text-sm font-medium" style={{ color }}>{getLabel(score)}</span>

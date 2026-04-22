@@ -22,8 +22,8 @@ export default function ChipSelect({ options = [], selected = [], onToggle, mult
             onClick={() => handleClick(option)}
             className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150
               ${isSelected
-                ? 'bg-accent text-white'
-                : 'bg-surface text-text-secondary border border-border hover:border-border-hover hover:bg-surface-hover'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-50 text-gray-600 border border-gray-200 hover:border-gray-300 hover:bg-gray-100'
               }`}
           >
             {option}

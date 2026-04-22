@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Link2, FileText, PenLine, ArrowLeft, ArrowRight, CheckCircle2, ChevronDown } from 'lucide-react'
 import FileUpload from '../components/FileUpload'
 import ChipSelect from '../components/ChipSelect'
 import FontSelector from '../components/FontSelector'
@@ -94,6 +96,12 @@ const QA_SECTIONS = [
   },
 ]
 
+const pageTransition = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 }
+}
+
 export default function Build() {
   const [step, setStep] = useState(STEPS.ENTRY)
   const [resumeData, setResumeData] = useState(JSON.parse(JSON.stringify(EMPTY_DATA)))
@@ -102,7 +110,6 @@ export default function Build() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Handle file upload (LinkedIn or any doc)
   async function handleUpload(file) {
     setLoading(true)
     setError(null)
@@ -129,7 +136,6 @@ export default function Build() {
       const section = QA_SECTIONS.find(s => s.key === sectionKey)
 
       if (sectionKey === 'achievements') {
-        // Special handling for achievements array
         next.achievements = value.split('\n').filter(v => v.trim())
         return next
       }
@@ -199,9 +205,8 @@ export default function Build() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      {/* Header */}
-      <div className="mb-8">
+    <div className="max-w-3xl mx-auto px-6 py-12 sm:py-16">
+      <div className="mb-10">
         {step !== STEPS.ENTRY && (
           <button
             onClick={() => {
@@ -210,16 +215,13 @@ export default function Build() {
               else if (step === STEPS.FONT) setStep(STEPS.QA)
               else if (step === STEPS.DONE) setStep(STEPS.FONT)
             }}
-            className="text-sm text-text-tertiary hover:text-text-primary mb-4 flex items-center gap-1 transition-colors"
+            className="text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 flex items-center gap-1.5 transition-colors"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
-            </svg>
-            Back
+            <ArrowLeft className="w-4 h-4" /> Back
           </button>
         )}
-        <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight">Build Resume</h1>
-        <p className="text-sm text-text-secondary mt-1">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Build Resume</h1>
+        <p className="text-base text-gray-500 mt-2">
           {step === STEPS.ENTRY && 'Choose how you want to get started.'}
           {step === STEPS.QA && `Step ${qaSection + 1} of ${QA_SECTIONS.length} — ${QA_SECTIONS[qaSection].title}`}
           {step === STEPS.FONT && 'Choose a font for your resume.'}
@@ -227,18 +229,18 @@ export default function Build() {
         </p>
       </div>
 
-      {/* Error */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
+        <motion.div {...pageTransition} className="mb-8 p-4 bg-red-50 border border-red-200 rounded-xl text-sm font-medium text-red-800">
+          {error}
+        </motion.div>
       )}
 
-      {/* Step: Entry */}
       {step === STEPS.ENTRY && (
-        <div className="space-y-4">
+        <motion.div {...pageTransition} className="space-y-4">
           <EntryCard
             title="Upload LinkedIn PDF"
             description="Export your LinkedIn profile as PDF and upload it. We'll auto-fill everything."
-            icon="🔗"
+            icon={<Link2 className="w-6 h-6 text-blue-600" />}
           >
             <FileUpload onFileSelect={handleUpload} label="Upload LinkedIn PDF" description="Export from LinkedIn → Save as PDF" />
           </EntryCard>
@@ -246,7 +248,7 @@ export default function Build() {
           <EntryCard
             title="Upload Any Document"
             description="Upload a CV, marksheet, or any document. We'll extract whatever info is available."
-            icon="📄"
+            icon={<FileText className="w-6 h-6 text-blue-600" />}
           >
             <FileUpload onFileSelect={handleUpload} label="Upload Document" description="PDF, any format" />
           </EntryCard>
@@ -254,139 +256,136 @@ export default function Build() {
           <button
             type="button"
             onClick={startManual}
-            className="w-full p-5 border border-border rounded-xl text-left hover:border-border-hover hover:bg-surface transition-all duration-150 group"
+            className="w-full p-6 border border-gray-200 rounded-2xl text-left hover:border-blue-200 hover:shadow-lg hover:shadow-blue-900/5 bg-white transition-all duration-200 group flex items-start gap-4"
           >
-            <span className="text-xl mb-2 block">✍️</span>
-            <h3 className="text-sm font-semibold text-text-primary group-hover:text-accent transition-colors">Start from Scratch</h3>
-            <p className="text-xs text-text-secondary mt-1">Answer a few questions and we'll build your resume step by step.</p>
+            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors shrink-0">
+              <PenLine className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-700 transition-colors">Start from Scratch</h3>
+              <p className="text-sm text-gray-500 mt-1">Answer a few questions and we'll build your resume step by step.</p>
+            </div>
           </button>
 
-          {loading && <div className="mt-4"><SkeletonText lines={3} /></div>}
-        </div>
+          {loading && <div className="mt-8"><SkeletonText lines={3} /></div>}
+        </motion.div>
       )}
 
-      {/* Step: Q&A */}
       {step === STEPS.QA && (
-        <div className="space-y-5">
-          {/* Progress bar */}
-          <div className="w-full h-1 bg-surface rounded-full overflow-hidden">
-            <div
-              className="h-full bg-accent rounded-full transition-all duration-300"
-              style={{ width: `${((qaSection + 1) / QA_SECTIONS.length) * 100}%` }}
+        <motion.div {...pageTransition} className="space-y-8">
+          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${((qaSection + 1) / QA_SECTIONS.length) * 100}%` }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="h-full bg-blue-600 rounded-full"
             />
           </div>
 
-          {(() => {
-            const section = QA_SECTIONS[qaSection]
-            return (
-              <div className="space-y-5">
-                {section.optional && (
-                  <p className="text-xs text-text-tertiary">This section is optional. Skip if not applicable.</p>
+          <div className="space-y-6">
+            {QA_SECTIONS[qaSection].optional && (
+              <p className="text-xs font-bold uppercase tracking-wider text-gray-400">This section is optional. Skip if not applicable.</p>
+            )}
+
+            {QA_SECTIONS[qaSection].fields.map(field => (
+              <div key={field.key} className="space-y-2">
+                <label className="block text-sm font-bold text-gray-900">
+                  {field.label}
+                  {field.optional && <span className="text-gray-400 font-medium ml-2">(optional)</span>}
+                </label>
+
+                {field.chips && (
+                  <div className="mb-3">
+                    <ChipSelect
+                      options={field.chips}
+                      selected={getFieldValue(QA_SECTIONS[qaSection].key, field.key)?.split(', ').filter(Boolean) || []}
+                      onToggle={(chips) => handleChipToggle(QA_SECTIONS[qaSection].key, field.key, chips)}
+                      multiple={QA_SECTIONS[qaSection].key === 'skills'}
+                    />
+                  </div>
                 )}
 
-                {section.fields.map(field => (
-                  <div key={field.key}>
-                    <label className="block text-sm font-medium text-text-primary mb-1.5">
-                      {field.label}
-                      {field.optional && <span className="text-text-tertiary font-normal ml-1">(optional)</span>}
-                    </label>
-
-                    {field.chips && (
-                      <div className="mb-2">
-                        <ChipSelect
-                          options={field.chips}
-                          selected={getFieldValue(section.key, field.key)?.split(', ').filter(Boolean) || []}
-                          onToggle={(chips) => handleChipToggle(section.key, field.key, chips)}
-                          multiple={section.key === 'skills'}
-                        />
-                      </div>
-                    )}
-
-                    {field.isMultiline ? (
-                      <textarea
-                        value={getFieldValue(section.key, field.key)}
-                        onChange={e => updateField(section.key, field.key, e.target.value)}
-                        placeholder={field.placeholder}
-                        rows={4}
-                        className="w-full p-3 border border-border rounded-lg text-sm resize-none focus:border-accent transition-colors"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        value={getFieldValue(section.key, field.key)}
-                        onChange={e => updateField(section.key, field.key, e.target.value)}
-                        placeholder={field.placeholder}
-                        className="w-full p-3 border border-border rounded-lg text-sm focus:border-accent transition-colors"
-                      />
-                    )}
-                  </div>
-                ))}
-
-                <div className="flex justify-between pt-4">
-                  <button
-                    type="button"
-                    onClick={prevSection}
-                    className="px-5 py-2.5 text-sm font-medium text-text-secondary bg-surface rounded-lg hover:bg-surface-hover transition-colors"
-                  >
-                    {qaSection === 0 ? 'Back' : 'Previous'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={nextSection}
-                    className="px-5 py-2.5 text-sm font-semibold text-white bg-accent rounded-lg hover:bg-accent-hover transition-colors"
-                  >
-                    {qaSection === QA_SECTIONS.length - 1 ? 'Choose Font' : 'Next'}
-                  </button>
-                </div>
+                {field.isMultiline ? (
+                  <textarea
+                    value={getFieldValue(QA_SECTIONS[qaSection].key, field.key)}
+                    onChange={e => updateField(QA_SECTIONS[qaSection].key, field.key, e.target.value)}
+                    placeholder={field.placeholder}
+                    rows={4}
+                    className="w-full p-4 border border-gray-200 rounded-xl text-sm resize-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-shadow outline-none shadow-sm"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={getFieldValue(QA_SECTIONS[qaSection].key, field.key)}
+                    onChange={e => updateField(QA_SECTIONS[qaSection].key, field.key, e.target.value)}
+                    placeholder={field.placeholder}
+                    className="w-full p-4 border border-gray-200 rounded-xl text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-shadow outline-none shadow-sm"
+                  />
+                )}
               </div>
-            )
-          })()}
-        </div>
+            ))}
+
+            <div className="flex justify-between pt-6 border-t border-gray-100 mt-8">
+              <button
+                type="button"
+                onClick={prevSection}
+                className="px-6 py-3 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex items-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" /> {qaSection === 0 ? 'Back' : 'Previous'}
+              </button>
+              <button
+                type="button"
+                onClick={nextSection}
+                className="px-6 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] rounded-xl transition-all shadow-sm flex items-center gap-2"
+              >
+                {qaSection === QA_SECTIONS.length - 1 ? 'Choose Font' : 'Next'} <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </motion.div>
       )}
 
-      {/* Step: Font */}
       {step === STEPS.FONT && (
-        <div className="space-y-6">
+        <motion.div {...pageTransition} className="space-y-8">
           <FontSelector selected={fontChoice} onSelect={setFontChoice} />
           <button
             type="button"
             onClick={handleGenerate}
             disabled={loading}
-            className="w-full px-6 py-3 bg-accent text-white text-sm font-semibold rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50"
+            className="w-full px-8 py-4 bg-blue-600 text-white text-base font-bold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 shadow-sm"
           >
-            {loading ? 'Generating...' : 'Generate & Download Resume'}
+            {loading ? 'Generating PDF...' : 'Generate & Download Resume'}
           </button>
           {loading && <SkeletonText lines={2} />}
-        </div>
+        </motion.div>
       )}
 
-      {/* Step: Done */}
       {step === STEPS.DONE && (
-        <div className="text-center py-12 space-y-4">
-          <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
+        <motion.div {...pageTransition} className="text-center py-16 space-y-6">
+          <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-10 h-10 text-green-600" />
           </div>
-          <h2 className="text-xl font-bold text-text-primary">Resume Downloaded!</h2>
-          <p className="text-sm text-text-secondary">Your resume has been generated and downloaded as a PDF.</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+          <div>
+            <h2 className="text-3xl font-extrabold text-gray-900">Resume Downloaded!</h2>
+            <p className="text-base text-gray-500 mt-2">Your resume has been successfully generated and saved to your device.</p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
             <button
               type="button"
               onClick={handleGenerate}
-              className="px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-lg hover:bg-accent-hover transition-colors"
+              className="px-8 py-3.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm"
             >
               Download Again
             </button>
             <button
               type="button"
               onClick={() => { setStep(STEPS.FONT) }}
-              className="px-5 py-2.5 text-sm font-medium text-text-secondary bg-surface rounded-lg hover:bg-surface-hover border border-border transition-colors"
+              className="px-8 py-3.5 text-sm font-bold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 rounded-xl transition-all shadow-sm"
             >
               Change Font
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   )
@@ -395,25 +394,38 @@ export default function Build() {
 function EntryCard({ title, description, icon, children }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="border border-border rounded-xl overflow-hidden">
+    <div className={`border border-gray-200 rounded-2xl overflow-hidden bg-white transition-all ${open ? 'shadow-md border-blue-200' : 'hover:border-blue-200 hover:shadow-sm'}`}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-full p-5 text-left hover:bg-surface transition-colors flex items-start gap-3"
+        className="w-full p-6 text-left hover:bg-gray-50 transition-colors flex items-center gap-4 group"
       >
-        <span className="text-xl">{icon}</span>
-        <div className="flex-1">
-          <h3 className="text-sm font-semibold text-text-primary">{title}</h3>
-          <p className="text-xs text-text-secondary mt-0.5">{description}</p>
+        <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors shrink-0">
+          {icon}
         </div>
-        <svg
-          width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-          className={`mt-0.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
+        <div className="flex-1">
+          <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{title}</h3>
+          <p className="text-sm text-gray-500 mt-1">{description}</p>
+        </div>
+        <ChevronDown
+          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+        />
       </button>
-      {open && <div className="px-5 pb-5">{children}</div>}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-6 pt-2 border-t border-gray-50">
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -15,17 +15,17 @@ export default function FontSelector({ selected, onSelect }) {
           onClick={() => onSelect(font.name)}
           className={`p-4 rounded-xl border-2 transition-all duration-200 text-left
             ${selected === font.name
-              ? 'border-accent bg-accent-light'
-              : 'border-border hover:border-border-hover'
+              ? 'border-blue-600 bg-blue-50'
+              : 'border-gray-200 hover:border-gray-300'
             }`}
         >
           <div className="mb-3" style={{ fontFamily: font.family }}>
             <p className="text-lg font-bold leading-tight">John Doe</p>
             <p className="text-xs mt-1 leading-snug">Software Engineer with 3 years of experience building scalable apps.</p>
           </div>
-          <div className="border-t border-border pt-2 mt-2">
-            <p className="text-xs font-semibold text-text-primary">{font.name}</p>
-            <p className="text-[10px] text-text-tertiary">{font.style}</p>
+          <div className="border-t border-gray-200 pt-2 mt-2">
+            <p className="text-xs font-semibold text-gray-900">{font.name}</p>
+            <p className="text-[10px] text-gray-400">{font.style}</p>
           </div>
         </button>
       ))}
